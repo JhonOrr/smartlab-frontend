@@ -8,6 +8,8 @@ const Layout=({ children }) =>{
   const [name, setName] =useState()
     
   // console.log(session?.session.user.email)
+
+  
   return (
     <div style={{ display: "flex" }}>
       <Sidebar/>

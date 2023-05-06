@@ -38,9 +38,8 @@ export const authOptions = {
 
         if (response.ok && data.user && data.key) {
           return {
-            email: data?.user.email,
+            email: data?.user.cliente,
             name: data?.user.first_name + ' ' + data?.user.last_name,
-            pedo: data?.user.username
           }
         } else return null;
       },
@@ -51,7 +50,7 @@ export const authOptions = {
       session.user = { ...session.user };
       if (user) {
         session.user.name = user.name;
-        session.user.email = user.email;
+        session.user.email = user.cliente;
       }
       return session;
     }

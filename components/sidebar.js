@@ -5,6 +5,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import { useRouter } from "next/router";
 import { signOut, useSession } from "next-auth/react";
+import { Typography } from "@mui/material";
 
 function Sidebar(props) {
 
@@ -33,7 +34,11 @@ function Sidebar(props) {
             <div className={Styles.icon}>
               <AccountCircleIcon />
             </div>
-            <div className={Styles.title}>Bienvenido, {session?.session.user.name}</div>
+            <div className={Styles.title}>
+              <Typography variant='h6'>
+                Bienvenido, {session?.session.user.name}
+              </Typography>
+            </div>
           </li>
         </div>
         <div>
@@ -42,7 +47,11 @@ function Sidebar(props) {
               <Link href={val.link} key={val.key}>
                 <li className={Styles.row}>
                   <div className={Styles.icon}>{val.icon}</div>
-                  <div className={Styles.title}>{val.title}</div>
+                  <div className={Styles.title}>
+                    <Typography variant="body1">
+                      {val.title}
+                    </Typography>
+                  </div>
                 </li>
               </Link>
             );
@@ -53,7 +62,9 @@ function Sidebar(props) {
             <div className={Styles.icon}>
               <ExitToAppIcon />
             </div>
-            <div className={Styles.title}>Cerrar Sesión</div>
+            <div className={Styles.title}>
+              Cerrar Sesión
+            </div>
           </li>
         </div>
       </ul>
