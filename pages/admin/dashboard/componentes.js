@@ -1,55 +1,86 @@
-import { BasicTable } from "@/components/BasicTable";
+import { BasicTable } from "@/components/BasicTableComponente";
 import { Button } from "@mui/material";
 import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+import CrearEquipo from "@/components/createEquip";
+import { getSession } from "next-auth/react";
+import CrearComponente from "@/components/CreateComponent";
 
-function Test() {
-  const [equipos, setEquipos] = useState([]);
-  const [equiposMarca, setEquiposMarca] = useState([]);
-  const [columns, setColumns] = useState({});
 
+function Test({ data, dataEquipos }) {
+  const { data: session, status } = useSession();
+  const [componentes, setComponentes] = useState([]);
+  const [listaEquipos, setListaEquipos] = useState([])
 
-  
-  let column = [
+  const [open, setOpen] = useState(false);
+  let columns = [
     {
-      header: "Marca",
-      accessorKey: "marca",
+      header: "Id",
+      accessorKey: "id",
     },
     {
-      header: "Modelo",
-      accessorKey: "modelo",
+      header: "Descripcion",
+      accessorKey: "descripcion",
     },
     {
-      header: "Nombre",
-      accessorKey: "nombre",
+      header: "Equipo",
+      accessorKey: "equipo_name",
     },
   ];
 
-  const getEquipos = async () => {
-    const response = await fetch("http://127.0.0.1:8000/api/v1/equipos");
-    const data = await response.json();
-    console.log(data);
-    let equipoMarca = [];
-    data.map((d) => {
-      equipoMarca.push(d.marca);
-    });
-
-
-    setEquipos(data);
-    console.log(equipoMarca);
+  const getComponentes = () => {
+    setComponentes(data);
   };
+
   useEffect(() => {
-    getEquipos();
+    getComponentes();
+    setListaEquipos(dataEquipos)
+    console.log(dataEquipos)
   }, []);
 
   return (
     <div>
-      {equipos.map((equipo) => {
-        return <div>{equipo.nombre}</div>;
-      })}
-      <Button variant="contained">Nuevo Equipo</Button>
-      <BasicTable columns={column} data={equipos}></BasicTable>
+      <CrearComponente
+        open={open}
+        setOpen={setOpen}
+        cliente={session?.session.user.email}
+        equipos = {componentes} 
+        setComponentes = {setComponentes}
+        dataEquipos = {dataEquipos}
+        />
+      <Button variant="contained" onClick={() => setOpen(true)}> 
+        Nuevo Componente
+      </Button>
+      <BasicTable columns={columns} data={componentes} setEquipos = {setComponentes} dataEquipos = {dataEquipos}/>
     </div>
   );
 }
 
 export default Test;
+
+export async function getServerSideProps(context) {
+  const { req } = context;
+  const session = await getSession({ req });
+  const response = await fetch(
+    `http://127.0.0.1:8000/api/v1/cliente/${session?.session.user.email}/componentes`
+  );
+  const data = await response.json();
+
+
+  
+
+  const responseEquipos = await fetch(
+    `http://127.0.0.1:8000/api/v1/cliente/${session?.session.user.email}/equipos`
+  );
+  const dataCliente = await responseEquipos.json();
+  const dataEquipos = dataCliente.Equipos
+
+
+
+  return {
+    props: {
+      data: data,
+      dataEquipos : dataEquipos
+    },
+  };
+}

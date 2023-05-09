@@ -23,7 +23,7 @@ export const Options = [
     },
     {
         key :4,
-        title:"Solicitudes",
+        title:"Mis Muestras",
         icon: <ScienceIcon/>,
         link: "/admin/dashboard/muestras "
     }

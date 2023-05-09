@@ -7,12 +7,13 @@ import {
   DialogTitle,
   TextField,
   Button,
+  MenuItem
 } from "@mui/material";
 
 const paperStyle = {
   padding: "40px 20px",
   height: "auto",
-  width: "auto",
+  width: "800px",
   margin: " 25px auto",
 };
 const buttonStyle = { margin: "10px 0", width: "40%" };
@@ -25,90 +26,82 @@ const containerStyle = {
 };
 const inputStyle = { margin: "10px auto" };
 
-const CrearEquipo = (props) => {
+const CrearComponente = (props) => {
   const { data: session, status } = useSession();
 
-  const [nombre, setNombre] = useState('');
-  const [marca, setMarca] = useState('');
-  const [modelo, setModelo] = useState('');
+  const [descripcion, setDescripcion] = useState("");
+  const [equipo, setEquipo] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await fetch("http://127.0.0.1:8000/api/v1/equipos", {
+    await fetch("http://127.0.0.1:8000/api/v1/componentes", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        marca: marca,
-        modelo: modelo,
-        nombre: nombre,
-        cliente: props.cliente,
+        descripcion: descripcion,
+        equipo: equipo,
       }),
     });
-    setNombre('')
-    setMarca('')
-    setModelo('')
+    setDescripcion("");
+    setEquipo("");
+
     props.setOpen(false);
     const response = await fetch(
-      `http://127.0.0.1:8000/api/v1/cliente/${session?.session.user.email}/equipos`
+      `http://127.0.0.1:8000/api/v1/cliente/${session?.session.user.email}/componentes`
     );
     const data = await response.json();
-    let equipoMarca = [];
-    data?.Equipos.map((d) => {
-      equipoMarca.push(d.marca);
-    });
-    props.setEquipos(data?.Equipos);
+
+    props.setComponentes(data);
   };
 
   return (
     <>
-      <Dialog open={props.open}>
+      <Dialog open={props.open}  >
         <form onSubmit={handleSubmit}>
-          <DialogTitle textAlign="center" sx={{fontSize:'2rem'}}>
-            Crear Equipo
+          <DialogTitle textAlign="center" sx={{ fontSize: "2rem"}}>
+            Crear Componente
           </DialogTitle>
 
-          <DialogContent>
+          <DialogContent style={{width:'600px'}}>
             <TextField
-              label="Nombre"
-              placeholder="Nombre"
+              label="Descripcion"
+              placeholder="Descripcion"
               type="text"
               variant="outlined"
               style={inputStyle}
               fullWidth
-              value={nombre}
+              value={descripcion}
               required
               onChange={(e) => {
-                setNombre(e.target.value);
+                setDescripcion(e.target.value);
               }}
             />
+
+
             <TextField
-              label="Marca"
-              placeholder="Marca"
-              type="text"
-              variant="outlined"
-              style={inputStyle}
-              value={marca}
-              onChange={(e) => {
-                setMarca(e.target.value);
-              }}
               fullWidth
-              required
-            />
-            <TextField
-              label="Modelo"
-              placeholder="Modelo"
-              variant="outlined"
               style={inputStyle}
-              type="text"
-              value={modelo}
-              fullWidth
-              onChange={(e) => {
-                setModelo(e.target.value);
-              }}
+              variant="outlined"
+              value={equipo}
+              select
               required
-            />
+              label="Seleccione Equipo"
+              onChange={(e)=>setEquipo(e.target.value)}
+              
+            >
+              {props.dataEquipos?.map((equipo) => {
+                return (
+                  <MenuItem value={equipo.id} key={equipo.id}>
+                    {equipo.nombre}
+                  </MenuItem>
+                );
+              })}
+            </TextField>
+
+
+
           </DialogContent>
           <DialogActions
             sx={{
@@ -125,7 +118,7 @@ const CrearEquipo = (props) => {
               Cancel
             </Button>
             <Button variant="contained" style={buttonStyle} type="submit">
-              Crear equipo
+              Crear Componente
             </Button>
           </DialogActions>
         </form>
@@ -134,4 +127,4 @@ const CrearEquipo = (props) => {
   );
 };
 
-export default CrearEquipo;
+export default CrearComponente;

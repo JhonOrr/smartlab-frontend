@@ -30,13 +30,13 @@ function Sidebar(props) {
         }}
       >
         <div>
-          <li>
+          <li className={Styles.row}>
             <div className={Styles.icon}>
               <AccountCircleIcon />
             </div>
             <div className={Styles.title}>
-              <Typography variant='h6'>
-                Bienvenido, {session?.session.user.name}
+              <Typography variant='body1'>
+                {session?.session.user.name}
               </Typography>
             </div>
           </li>
@@ -63,7 +63,10 @@ function Sidebar(props) {
               <ExitToAppIcon />
             </div>
             <div className={Styles.title}>
+              <Typography variant="body1">
               Cerrar Sesión
+              </Typography>
+           
             </div>
           </li>
         </div>

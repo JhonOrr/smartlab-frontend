@@ -5,14 +5,14 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import {
   IconButton,
   Dialog,
-  DialogActions,
+  DialogActions,  
   DialogContent,
   DialogTitle,
   TextField,
   Button,
 } from "@mui/material";
-import EditEquip from "./EditEquip";
 import { useSession } from "next-auth/react";
+import EditComponent from "./EditComponent";
 
 export const BasicTable = (props) => {
   const buttonStyle = { margin: "10px 0", width: "40%" };
@@ -34,18 +34,18 @@ export const BasicTable = (props) => {
 
   const handleDelete = async () => {
    
-    await fetch(`http://localhost:8000/api/v1/equipos/${equipoId.id}`, {
+    await fetch(`http://localhost:8000/api/v1/componentes/${equipoId.id}`, {
       method: "DELETE",
     });
     const response = await fetch(
-      `http://127.0.0.1:8000/api/v1/cliente/${session?.session.user.email}/equipos`
+      `http://127.0.0.1:8000/api/v1/cliente/${session?.session.user.email}/componentes`
     );
     const data = await response.json();
     let equipoMarca = [];
-    data?.Equipos.map((d) => {
+    data.map((d) => {
       equipoMarca.push(d.marca);
     });
-    props.setEquipos(data?.Equipos);
+    props.setEquipos(data);
     setDeleteOpen(false);
   };
 
@@ -75,10 +75,11 @@ export const BasicTable = (props) => {
     <>
       <MaterialReactTable columns={columns} data={props.data} />
       {selectedRow && (
-        <EditEquip
+        <EditComponent
           rowData={selectedRow}
           onClose={handleDialogClose}
           setEquipos={props.setEquipos}
+          dataEquipos = {props.dataEquipos}
         />
       )}
       <Dialog open={deleteOpen}>
