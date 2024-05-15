@@ -1,0 +1,37 @@
+
+.sidebar{
+    height: 100vh;
+    width: 20%;
+    background-color: #154a7d;
+}
+
+.sidebarList{
+    /* height: auto; */
+    width: 100%;
+    padding:0;
+}
+
+.sidebarList .row{
+    width: 100%;
+    height: 60px;
+    list-style-type: none;
+    margin:0;
+    display: flex;
+    flex-direction: row;
+    color:#fff;
+    justify-content: center;
+    align-items: center;
+}
+
+.row .icon{
+    flex: 30%;
+    display: grid;
+    place-items: center;
+}
+.row .title{
+    flex:70%;
+}
+.sidebarList .row:hover{
+    cursor: pointer;
+    background-color: #0073a1;
+}
